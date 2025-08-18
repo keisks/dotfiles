@@ -1,0 +1,71 @@
+setopt auto_cd
+setopt auto_pushd
+setopt correct
+
+export HISTSIZE=10000
+export SAVEHIST=10000
+export LANGUAGE=en_US:en
+export LANG=en_US.UTF-8
+
+setopt share_history
+setopt hist_reduce_blanks
+setopt hist_ignore_all_dups
+
+alias ll='CLICOLOR_FORCE=1 ls -aGhl'
+alias less='less -R'
+alias cp='cp -p'
+alias diskspace="du -S | sort -n -r |more"
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias df='df -h'
+alias du='du -h'
+
+# pretty aliases
+alias pretty_csv='~/.zsh/pretty_csv.sh'
+alias pretty_tsv='~/.zsh/pretty_tsv.sh'
+
+# git aliases
+alias gs='git -c color.status=always status'
+alias gc='git commit'
+alias ga='git add'
+alias gd='git -c color.ui=always diff'
+alias gb='git branch'
+alias gl='git -c color.ui=always log'
+alias gsb='git show-branch'
+alias gco='git checkout'
+alias gg='git grep'
+alias gk='gitk --all'
+alias gr='git rebase'
+alias gri='git rebase --interactive'
+alias gcp='git cherry-pick'
+alias grm='git rm'
+alias gtree='git log --graph --pretty=oneline --abbrev-commit'
+
+# git completion
+fpath=(~/.zsh/completion $fpath)
+autoload -U compinit
+compinit -u
+
+# prompt
+setopt PROMPT_SUBST
+source ~/.zsh/.git-prompt.sh
+GIT_PS1_SHOWDIRTYSTATE=true
+GIT_PS1_SHOWUNTRACKEDFILES=true
+GIT_PS1_SHOWSTASHSTATE=true
+GIT_PS1_SHOWUPSTREAM=auto
+PROMPT='%F{93}%n%F{1}@%m%f:%F{214}%~%f%F{46}$(__git_ps1 "[%s]" )%f '
+
+# PATHS
+
+{{ if eq .chezmoi.os "darwin" }}
+
+if [ -d "/opt/homebrew/opt/ruby/bin" ]; then
+
+  export PATH=/opt/homebrew/opt/ruby/bin:$PATH
+  export PATH=`gem environment gemdir`/bin:$PATH
+fi
+export PATH="$(brew --prefix python)/libexec/bin:$PATH"
+
+{{ end }}
+
