@@ -1,0 +1,107 @@
+"""""""""""""""""""""""""""""""""""""""""""""""""
+""""" Vundle.vim (must be at the beginning) """""
+"""""""""""""""""""""""""""""""""""""""""""""""""
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-fugitive'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'scrooloose/nerdtree'
+Plugin 'w0rp/ale'
+Plugin 'w0ng/vim-hybrid'
+Plugin 'tpope/vim-repeat'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'ryanoasis/vim-devicons'
+Plugin 'Phize/vim-rainbow_pairs'
+Plugin 'davidhalter/jedi-vim'
+Plugin 'elzr/vim-json'
+Plugin 'ekalinin/Dockerfile.vim'
+Plugin 'iamcco/markdown-preview.nvim'
+
+
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+
+""""""""""""""""""""""""""""
+""""" general settings """""
+""""""""""""""""""""""""""""
+set encoding=utf-8
+set number
+set expandtab
+set tabstop=2
+set hlsearch
+set ignorecase
+set smartcase
+set incsearch
+autocmd FileType sh setlocal shiftwidth=2
+syntax enable
+set background=dark
+autocmd ColorScheme * highlight LineNr ctermfg=245
+colorscheme hybrid
+set autoindent
+set ruler
+set cursorline
+set list
+set listchars=tab:>-
+set backspace=indent,eol,start
+hi NonText ctermbg=NONE ctermfg=59 guibg=NONE guifg=NONE
+hi SpecialKey ctermbg=NONE ctermfg=59 guibg=NONE guifg=NONE
+set fileencodings=utf-8,iso-2022-jp,euc-jp,sjis
+set updatetime=1000 " for vim-gitgutter
+
+
+set guifont=Droid\ Sans\ Mono\ for\ Powerline\ Nerd\ Font\ Complete\ 12
+let g:WebDevIconsNerdTreeBeforeGlyphPadding = ""
+let g:WebDevIconsUnicodeDecorateFolderNodes = v:true
+" after a re-source, fix syntax matching issues (concealing brackets):
+if exists('g:loaded_webdevicons')
+  call webdevicons#refresh()
+endif
+
+""""""""""""""""""""
+""""" NerdTree """""
+""""""""""""""""""""
+nnoremap <silent><C-e> :NERDTreeToggle<CR>
+
+
+""""""""""""""""""""
+""""" fugitive """""
+""""""""""""""""""""
+nnoremap ,gd :Gdiff<CR>
+
+
+"""""""""""""""""""""""
+""""" vim-airline """""
+"""""""""""""""""""""""
+let g:airline_theme='light'
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#branch#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#ale#error_symbol = ' '
+let g:airline#extensions#ale#warning_symbol = ' '
+
+
+""""""""""""""""""""""""
+""""" rainbow pair """""
+""""""""""""""""""""""""
+let g:rainbow_pairs_token_pairs = [
+      \ ['/(/',  '/)/'],
+      \ ['/\[/', '/\]/'],
+      \ ['/{/',  '/}/']
+      \]
+
+
+"""""""""""""""
+""""" ale """""
+"""""""""""""""
+let g:ale_linters = {
+    \ 'python': ['flake8'],
+    \ }
+

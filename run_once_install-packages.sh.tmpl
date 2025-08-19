@@ -1,0 +1,18 @@
+#!/bin/zsh
+
+{{ if eq .chezmoi.os "darwin" }}
+
+brew bundle --global
+
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
+cd $HOME
+
+{{ end }}
+
+
+{{ if eq .chezmoi.os "linux" }}
+
+cd $HOME
+
+{{ end }}
