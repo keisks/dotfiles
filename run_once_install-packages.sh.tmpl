@@ -13,6 +13,12 @@ cd $HOME
 
 {{ if eq .chezmoi.os "linux" }}
 
-cd $HOME
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+# just in case
+mkdir -p ~/.vim/colors
+curl -fsSL https://raw.githubusercontent.com/w0ng/vim-hybrid/master/colors/hybrid.vim \
+  -o ~/.vim/colors/hybrid.vim
 
 {{ end }}
+
+
