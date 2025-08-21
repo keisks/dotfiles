@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 if [ -f ~/.bashrc ]; then
     cp ~/.bashrc ~/.bashrc.original
