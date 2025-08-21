@@ -59,12 +59,9 @@ PROMPT='%F{93}%n%F{1}@%m%f:%F{214}%~%f%F{46}$(__git_ps1 "[%s]" )%f '
 # PATHS
 
 {{ if eq .chezmoi.os "darwin" }}
-
 if [ -d "/opt/homebrew/opt/ruby/bin" ]; then
-
   export PATH=/opt/homebrew/opt/ruby/bin:$PATH
   export PATH=`gem environment gemdir`/bin:$PATH
 fi
 export PATH="$(brew --prefix python)/libexec/bin:$PATH"
-
 {{ end }}
