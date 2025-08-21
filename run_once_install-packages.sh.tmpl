@@ -10,7 +10,6 @@ cd $HOME
 
 {{ end }}
 
-
 {{ if eq .chezmoi.os "linux" }}
 
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
@@ -20,5 +19,4 @@ curl -fsSL https://raw.githubusercontent.com/w0ng/vim-hybrid/master/colors/hybri
   -o ~/.vim/colors/hybrid.vim
 
 {{ end }}
-
 

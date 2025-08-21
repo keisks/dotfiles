@@ -1,3 +1,4 @@
+initial_scripts/*
 {{ if eq .chezmoi.os "linux" }}
 .Brewfile
 {{ end }}
