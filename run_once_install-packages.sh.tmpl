@@ -1,22 +1,15 @@
 #!/bin/zsh
 
 {{ if eq .chezmoi.os "darwin" }}
-
 brew bundle --global
-
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-
 cd $HOME
-
 {{ end }}
 
 {{ if eq .chezmoi.os "linux" }}
-
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 # just in case
 mkdir -p ~/.vim/colors
 curl -fsSL https://raw.githubusercontent.com/w0ng/vim-hybrid/master/colors/hybrid.vim \
   -o ~/.vim/colors/hybrid.vim
-
 {{ end }}
-
