@@ -1,13 +1,11 @@
 #!/bin/bash
 
-# Handle .bashrc
 if [ -f ~/.bashrc ]; then
     cp ~/.bashrc ~/.bashrc.original
 else
     touch ~/.bashrc.original
 fi
 
-# Handle .zshrc
 if [ -f ~/.zshrc ]; then
     cp ~/.zshrc ~/.zshrc.original
 else
@@ -22,7 +20,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     brew bundle
 fi
 
-### install zellij for linux
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     echo "Start install zellij"
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y

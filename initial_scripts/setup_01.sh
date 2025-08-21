@@ -25,8 +25,10 @@ EOF
 chmod 600 ~/.ssh/config
 
 ### install chezmoi
-echo "Install chezmoi"
 if [[ "$OSTYPE" == "darwin"* ]]; then
+    echo "Install Homebrew ..."
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    echo "Install chezmoi ..."
     brew install chezmoi
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     sh -c "$(curl -fsLS get.chezmoi.io)"
@@ -36,7 +38,7 @@ else
 fi
 
 ###
-echo "Add the ssh key (pub) to github. https://github.com/settings/keys "
+echo "setup_01 completed!! Add the ssh key (pub) to github. https://github.com/settings/keys "
 echo "Then run setup_02.sh"
 cat ~/.ssh/id_ed25519.pub
 
