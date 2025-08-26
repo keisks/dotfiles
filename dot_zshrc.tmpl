@@ -2,14 +2,17 @@ setopt auto_cd
 setopt auto_pushd
 setopt correct
 
-export HISTSIZE=10000
-export SAVEHIST=10000
+export HISTSIZE=1000000
+export SAVEHIST=1000000
 export LANGUAGE=en_US:en
 export LANG=en_US.UTF-8
 
 setopt share_history
 setopt hist_reduce_blanks
 setopt hist_ignore_all_dups
+setopt hist_ignore_space
+setopt hist_save_no_dups
+setopt inc_append_history
 
 alias ll='CLICOLOR_FORCE=1 ls -aGhl'
 alias less='less -R'
