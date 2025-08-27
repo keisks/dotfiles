@@ -18,7 +18,7 @@ chezmoi apply
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
     echo "Install bundles for Homebrew."
-    brew bundle
+    NONINTERACTIVE=1 brew bundle
 fi
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
