@@ -31,7 +31,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     echo "Install Homebrew ..."
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     echo "Install chezmoi ..."
-    brew install chezmoi
+    NONINTERACTIVE=1 brew install chezmoi
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     sh -c "$(curl -fsLS get.chezmoi.io)"
     ### or sh -c "$(wget -qO- get.chezmoi.io)"
