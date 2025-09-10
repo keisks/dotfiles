@@ -1,34 +1,154 @@
+##### ==== Shell behavior ====
+# zsh favorites
 setopt auto_cd
 setopt auto_pushd
 setopt correct
+setopt pushd_ignore_dups
+setopt pushdminus
 
-export HISTSIZE=1000000
-export SAVEHIST=1000000
+# vi-mode editing (like `set -o vi` in bash)
+bindkey -v
+
+##### ==== Locale ====
 export LANGUAGE=en_US:en
 export LANG=en_US.UTF-8
 
-setopt share_history
-setopt hist_reduce_blanks
-setopt hist_ignore_all_dups
-setopt hist_ignore_space
-setopt hist_save_no_dups
-setopt inc_append_history
+##### ==== History settings ====
+# File & sizes
+export HISTFILE=${HISTFILE:-$HOME/.zsh_history}
+export HISTSIZE=1000000
+export SAVEHIST=1000000
 
+# Behavior (closest to bash merge you liked)
+setopt share_history          # share across sessions
+setopt inc_append_history     # append immediately
+setopt hist_ignore_all_dups   # drop all dups
+setopt hist_ignore_space      # ignore leading-space cmds
+setopt hist_reduce_blanks     # trim extra spaces
+setopt hist_save_no_dups      # don't write duplicates
+setopt extended_history       # timestamps + durations in history
+
+# Ignore trivial commands (zsh pattern list)
+# (bash used HISTIGNORE="ls*:ll*:history*:pwd*:lv*:")
+# Approximate via HIST_FIND_NO_DUPS + aliases; also filter on write:
+function zshaddhistory() {
+  local cmd=${1%%$'\n'}
+  case "$cmd" in
+    ls*|ll*|history*|pwd*|lv*) return 1;;
+  esac
+  return 0
+}
+
+##### ==== TTY tweaks ====
+# disable XOFF (Ctrl-S)
+stty stop undef 2>/dev/null || true
+
+##### ==== Aliases ====
 alias ll='CLICOLOR_FORCE=1 ls -aGhl'
+alias la='ls -A'
+alias l='ls -CF'
 alias less='less -R'
 alias cp='cp -p'
-alias diskspace="du -S | sort -n -r |more"
+alias mv='mv -i'      # ask before overwrite
+alias rm='rm -i'      # ask before delete
+alias diskspace="du -S | sort -n -r | more"
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias df='df -h'
 alias du='du -h'
 
-# pretty aliases
+# pretty helpers
 alias pretty_csv='~/.zsh/pretty_csv.sh'
 alias pretty_tsv='~/.zsh/pretty_tsv.sh'
 
-# git aliases
+##### ==== Directory helpers ====
+alias md='mkdir -p'
+alias rd='rmdir'
+
+# Quick extraction function (popular)
+extract () {
+  local f="$1"
+  if [[ -f "$f" ]]; then
+    case "$f" in
+      *.tar.bz2)   tar xjf "$f"   ;;
+      *.tar.gz)    tar xzf "$f"   ;;
+      *.bz2)       bunzip2 "$f"   ;;
+      *.rar)       unrar x "$f"   ;;
+      *.gz)        gunzip "$f"    ;;
+      *.tar)       tar xf "$f"    ;;
+      *.tbz2)      tar xjf "$f"   ;;
+      *.tgz)       tar xzf "$f"   ;;
+      *.zip)       unzip "$f"     ;;
+      *.7z)        7z x "$f"      ;;
+      *.Z)         uncompress "$f";;
+      *)           echo "'$f' cannot be extracted via extract()" ;;
+    esac
+  else
+    echo "'$f' is not a valid file"
+  fi
+}
+
+##### ==== Completion ====
+# Native zsh completions
+fpath=(~/.zsh/completion $fpath)
+autoload -Uz compinit
+# Speed up compinit on first run; ignore insecure dirs
+compinit -u
+
+# Optionally use bash-style completion files (e.g., git-completion.bash)
+if [[ -f ~/git-completion.bash ]]; then
+  autoload -Uz bashcompinit && bashcompinit
+  source ~/git-completion.bash
+fi
+
+##### ==== Git prompt ====
+setopt PROMPT_SUBST
+# Try your zsh git-prompt shim first, then common bash locations via bashcompinit
+if [[ -f ~/.zsh/.git-prompt.sh ]]; then
+  source ~/.zsh/.git-prompt.sh
+elif [[ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]]; then
+  autoload -Uz bashcompinit && bashcompinit
+  source /usr/share/git-core/contrib/completion/git-prompt.sh
+elif [[ -f /usr/share/git/completion/git-prompt.sh ]]; then
+  autoload -Uz bashcompinit && bashcompinit
+  source /usr/share/git/completion/git-prompt.sh
+fi
+
+export GIT_PS1_SHOWDIRTYSTATE=true
+export GIT_PS1_SHOWUNTRACKEDFILES=true
+export GIT_PS1_SHOWSTASHSTATE=true
+export GIT_PS1_SHOWUPSTREAM=auto
+
+# Prompt (git-aware). Keep your style; colors via %F{color}
+PROMPT='%F{93}%n%F{1}@%m%f:%F{214}%~%f%F{46}$(__git_ps1 " [%s]")%f '
+
+##### ==== Colored man pages ====
+export LESS_TERMCAP_mb=$'\e[1;31m'
+export LESS_TERMCAP_md=$'\e[1;36m'
+export LESS_TERMCAP_me=$'\e[0m'
+export LESS_TERMCAP_se=$'\e[0m'
+export LESS_TERMCAP_so=$'\e[1;44;33m'
+export LESS_TERMCAP_ue=$'\e[0m'
+export LESS_TERMCAP_us=$'\e[1;32m'
+
+##### ==== PATHS ====
+# Put user bins first
+export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+
+{{ if eq .chezmoi.os "darwin" }}
+# Homebrew Ruby & gem bins (if present)
+if [[ -d "/opt/homebrew/opt/ruby/bin" ]]; then
+  export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+  export PATH="$(gem environment gemdir)/bin:$PATH"
+fi
+# Homebrew Python shims
+if command -v brew >/dev/null 2>&1; then
+  export PATH="$(brew --prefix python)/libexec/bin:$PATH"
+fi
+{{ end }}
+
+##### ==== Git aliases ====
 alias gs='git -c color.status=always status'
 alias gc='git commit'
 alias ga='git add'
@@ -45,26 +165,4 @@ alias gcp='git cherry-pick'
 alias grm='git rm'
 alias gtree='git log --graph --pretty=oneline --abbrev-commit'
 
-# git completion
-fpath=(~/.zsh/completion $fpath)
-autoload -U compinit
-compinit -u
 
-# prompt
-setopt PROMPT_SUBST
-source ~/.zsh/.git-prompt.sh
-GIT_PS1_SHOWDIRTYSTATE=true
-GIT_PS1_SHOWUNTRACKEDFILES=true
-GIT_PS1_SHOWSTASHSTATE=true
-GIT_PS1_SHOWUPSTREAM=auto
-PROMPT='%F{93}%n%F{1}@%m%f:%F{214}%~%f%F{46}$(__git_ps1 "[%s]" )%f '
-
-# PATHS
-
-{{ if eq .chezmoi.os "darwin" }}
-if [ -d "/opt/homebrew/opt/ruby/bin" ]; then
-  export PATH=/opt/homebrew/opt/ruby/bin:$PATH
-  export PATH=`gem environment gemdir`/bin:$PATH
-fi
-export PATH="$(brew --prefix python)/libexec/bin:$PATH"
-{{ end }}
