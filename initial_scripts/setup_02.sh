@@ -49,3 +49,5 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     echo "❌ Failed to install zellij after $MAX attempts"
     exit 1
 fi
+
+echo "🎉 setup_02 completed! Please re-login to apply changes."
