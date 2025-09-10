@@ -20,6 +20,29 @@ else
     touch ~/.zshrc.original
 fi
 
+# --- Backup and recreate bash_profile ---
+if [ -f "$HOME/.bash_profile" ]; then
+    cp "$HOME/.bash_profile" "$HOME/.bash_profile.original"
+fi
+cat > "$HOME/.bash_profile" <<'EOF'
+# Load .bashrc for interactive login shells
+if [ -f ~/.bashrc ]; then
+  . ~/.bashrc
+fi
+EOF
+
+# --- Backup and recreate zprofile ---
+if [ -f "$HOME/.zprofile" ]; then
+    cp "$HOME/.zprofile" "$HOME/.zprofile.original"
+fi
+cat > "$HOME/.zprofile" <<'EOF'
+# Load .zshrc for login shells
+if [ -f ~/.zshrc ]; then
+  . ~/.zshrc
+fi
+EOF
+
+
 # --- Run chezmoi ---
 chezmoi init git@github.com:keisks/dotfiles.git
 chezmoi apply
