@@ -1,6 +1,13 @@
 #!/bin/bash
 set -euo pipefail
 
+# --- Helpers ---
+have() { command -v "$1" >/dev/null 2>&1; }
+
+# Make sure user bins are in PATH (common on Linux)
+export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+
+# --- Backup existing shells' rc files ---
 if [ -f ~/.bashrc ]; then
     cp ~/.bashrc ~/.bashrc.original
 else
@@ -13,14 +20,17 @@ else
     touch ~/.zshrc.original
 fi
 
+# --- Run chezmoi ---
 chezmoi init git@github.com:keisks/dotfiles.git
 chezmoi apply
 
+# --- macOS: brew bundle (if available) ---
 if [[ "$OSTYPE" == "darwin"* ]]; then
     echo "Install bundles for Homebrew."
     NONINTERACTIVE=1 brew bundle
 fi
 
+# --- Linux: install zellij via cargo (robust loop) ---
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     echo "Start install zellij"
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
