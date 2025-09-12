@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+# vim: filetype=sh
+# -*- sh -*-
+
+# custom_rsync.sh — portable rsync wrapper for Ubuntu/macOS
+set -euo pipefail
+
+if [ $# -lt 2 ]; then
+  echo "Usage: $(basename "$0") SRC DST [--bwlimit KBPS]"
+  echo "Example: $(basename "$0") user@host:/path/src/  /path/dest/ --bwlimit 1250"
+  exit 1
+fi
+
+SRC="$1"; shift
+DST="$1"; shift
+
+# Optional: --bwlimit (kB/s); omit for max speed (e.g., DTNs)
+BWLIMIT=""
+if [ "${1:-}" = "--bwlimit" ] && [ -n "${2:-}" ]; then
+  BWLIMIT="$2"; shift 2
+fi
+
+# SSH hygiene: connect timeout + keepalives (good across NAT/VPN)
+SSH_OPTS='-o ConnectTimeout=60 -o ServerAliveInterval=60 -o ServerAliveCountMax=5'
+
+# Ask the *remote* rsync process to raise its soft FD limit before exec
+RSYNC_PATH='ulimit -n 65535 2>/dev/null || true; rsync'
+
+# Base opts (common best practice)
+OPTS=(
+  -avh
+  --partial
+  --timeout=600
+  -e "ssh $SSH_OPTS"
+  --rsync-path="$RSYNC_PATH"
+)
+
+# progress/stats (prefer modern single-line progress if available locally)
+if rsync --help 2>/dev/null | grep -q 'progress2'; then
+  OPTS+=( --info=stats2,progress2 )
+else
+  OPTS+=( --progress )
+fi
+
+# safer resume: use --append-verify if local rsync supports it
+if rsync --help 2>/dev/null | grep -q 'append-verify'; then
+  OPTS+=( --append-verify )
+fi
+
+# apply bwlimit if provided
+if [ -n "$BWLIMIT" ]; then
+  OPTS+=( --bwlimit="$BWLIMIT" )
+fi
+
+echo "Starting rsync:"
+echo "  SRC: $SRC"
+echo "  DST: $DST"
+[ -n "$BWLIMIT" ] && echo "  bwlimit: ${BWLIMIT} kB/s"
+echo
+
+rsync "${OPTS[@]}" "$SRC" "$DST"
+
+echo "✅ Done."
+
