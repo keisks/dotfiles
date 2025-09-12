@@ -11,6 +11,9 @@ setopt pushdminus
 
 # vi-mode editing (like `set -o vi` in bash)
 bindkey -v
+bindkey '^A' beginning-of-line
+bindkey '^E' end-of-line
+bindkey '^R' history-incremental-search-backward
 
 ##### ==== Locale ====
 export LANGUAGE=en_US:en

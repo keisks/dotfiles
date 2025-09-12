@@ -5,6 +5,11 @@
 # vi-mode editing
 set -o vi
 
+# Emacs-like convenience bindings
+bind '"\C-a": beginning-of-line'
+bind '"\C-e": end-of-line'
+bind '"\C-r": reverse-search-history'
+
 # zsh-like behavior in bash
 shopt -s autocd     # type directory name to cd
 shopt -s cdspell    # correct small typos in 'cd'
