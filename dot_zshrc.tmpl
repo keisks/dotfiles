@@ -89,6 +89,11 @@ extract () {
   fi
 }
 
+##### ==== Raise open-file limit if needed (for rsync and other file-heavy jobs) ====
+if [ "$(ulimit -n)" -lt 65535 ]; then
+  ulimit -n 65535 2>/dev/null || true
+fi
+
 ##### ==== Completion ====
 # Native zsh completions
 fpath=(~/.zsh/completion $fpath)
