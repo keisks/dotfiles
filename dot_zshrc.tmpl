@@ -90,9 +90,11 @@ extract () {
 }
 
 ##### ==== Raise open-file limit if needed (for rsync and other file-heavy jobs) ====
+{{ if eq .chezmoi.os "linux" }}
 if [ "$(ulimit -n)" -lt 65535 ]; then
   ulimit -n 65535 2>/dev/null || true
 fi
+{{ end }}
 
 ##### ==== Completion ====
 # Native zsh completions
