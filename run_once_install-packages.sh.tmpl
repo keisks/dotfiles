@@ -3,15 +3,35 @@
 # -*- sh -*-
 
 {{ if eq .chezmoi.os "darwin" }}
+# Install Homebrew bundle (global)
 brew bundle --global
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-cd $HOME
+
+# Install Vundle only if not already installed
+if [ ! -d "$HOME/.vim/bundle/Vundle.vim/.git" ]; then
+  git clone https://github.com/VundleVim/Vundle.vim.git "$HOME/.vim/bundle/Vundle.vim"
+else
+  echo "Vundle.vim already exists, skipping clone."
+fi
+
+cd "$HOME"
 {{ end }}
 
 {{ if eq .chezmoi.os "linux" }}
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-# just in case
-mkdir -p ~/.vim/colors
-curl -fsSL https://raw.githubusercontent.com/w0ng/vim-hybrid/master/colors/hybrid.vim \
-  -o ~/.vim/colors/hybrid.vim
+# Install Vundle only if not already installed
+if [ ! -d "$HOME/.vim/bundle/Vundle.vim/.git" ]; then
+  git clone https://github.com/VundleVim/Vundle.vim.git "$HOME/.vim/bundle/Vundle.vim"
+else
+  echo "Vundle.vim already exists, skipping clone."
+fi
+
+# Just in case: ensure colors dir exists
+mkdir -p "$HOME/.vim/colors"
+
+# Install hybrid.vim colorscheme if missing
+if [ ! -f "$HOME/.vim/colors/hybrid.vim" ]; then
+  curl -fsSL https://raw.githubusercontent.com/w0ng/vim-hybrid/master/colors/hybrid.vim \
+    -o "$HOME/.vim/colors/hybrid.vim"
+else
+  echo "hybrid.vim already exists, skipping download."
+fi
 {{ end }}
