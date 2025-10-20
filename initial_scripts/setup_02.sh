@@ -101,3 +101,4 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 fi
 
 echo "🎉 setup_02 completed! Please re-login to apply changes."
+echo "# curl -fsSL https://raw.githubusercontent.com/keisks/dotfiles/main/initial_scripts/setup_02.sh | bash"
