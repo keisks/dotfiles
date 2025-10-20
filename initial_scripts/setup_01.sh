@@ -41,6 +41,6 @@ fi
 
 ###
 echo "setup_01 completed!! Add the ssh key (pub) to github. https://github.com/settings/keys "
-echo "Then run setup_02.sh"
+echo "Then run setup_02.sh by curl -fsSL https://raw.githubusercontent.com/keisks/dotfiles/main/initial_scripts/setup_02.sh | bash"
 cat ~/.ssh/id_ed25519.pub
 
