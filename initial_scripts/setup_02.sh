@@ -53,6 +53,33 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     NONINTERACTIVE=1 brew bundle
 fi
 
+# --- Linux: install uv via cargo (robust loop) ---
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    echo "Start install uv"
+
+    # Install Rust/Cargo if not present
+    if ! command -v cargo >/dev/null 2>&1; then
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        . "$HOME/.cargo/env"
+    fi
+
+    export CARGO_TARGET_DIR=$HOME/.cargo/target
+    ulimit -n 65536 2>/dev/null || true
+
+    MAX=10
+    for i in $(seq 1 $MAX); do
+        echo "Attempt $i/$MAX..."
+        if cargo install --git https://github.com/astral-sh/uv uv --locked -j4; then
+            echo "✅ uv installed"
+            exit 0
+        fi
+        sleep 5
+    done
+
+    echo "❌ Failed to install uv after $MAX attempts"
+    exit 1
+fi
+
 # --- Linux: install zellij via cargo (robust loop) ---
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     echo "Start install zellij"
