@@ -50,7 +50,12 @@ function zshaddhistory() {
 stty stop undef 2>/dev/null || true
 
 ##### ==== Aliases ====
+{{ if eq .chezmoi.os "darwin"}}
 alias ll='CLICOLOR_FORCE=1 ls -aGhl'
+{{ end }}
+{{ if eq .chezmoi.os "linux" }}
+alias ll='ls -aGhl --color=auto'
+{{ end }}
 alias la='ls -A'
 alias l='ls -CF'
 alias less='less -R'
