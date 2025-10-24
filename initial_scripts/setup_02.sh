@@ -59,6 +59,16 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     curl -LsSf https://astral.sh/uv/install.sh | sh
 fi
 
+
+# --- Linux: install nvm, nodejs (npm) ---
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    echo "Start install nvm"
+    curl -LsSf https://raw.githubusercontent.com/nvm-sh/nvm/refs/heads/master/install.sh | sh
+    echo "Start install node (npm)"
+    nvm install node
+    echo "node (npm) installed. you can run e.g., `npm install -g @openai/code` "x
+fi
+
 # --- Linux: install zellij via cargo (robust loop) ---
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     echo "Start install zellij"
