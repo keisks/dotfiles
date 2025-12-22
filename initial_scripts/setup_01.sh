@@ -30,6 +30,7 @@ chmod 600 ~/.ssh/config
 if [[ "$OSTYPE" == "darwin"* ]]; then
     echo "Install Homebrew ..."
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    sleep 3m
     echo "Install chezmoi ..."
     NONINTERACTIVE=1 brew install chezmoi
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
