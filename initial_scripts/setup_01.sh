@@ -28,6 +28,8 @@ chmod 600 ~/.ssh/config
 
 ### install chezmoi
 if [[ "$OSTYPE" == "darwin"* ]]; then
+    xcode-select --install
+    sudo softwareupdate --install-rosetta
     echo "Install Homebrew ..."
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     sleep 3m
