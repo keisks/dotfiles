@@ -28,7 +28,9 @@ chmod 600 ~/.ssh/config
 
 ### install chezmoi
 if [[ "$OSTYPE" == "darwin"* ]]; then
+    echo "Install xcode clt"
     xcode-select --install
+    echo "Install rosetta"
     sudo softwareupdate --install-rosetta
     echo "Install Homebrew ..."
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
