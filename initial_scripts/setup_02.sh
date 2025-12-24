@@ -50,7 +50,7 @@ chezmoi apply
 # --- macOS: brew bundle (if available) ---
 if [[ "$OSTYPE" == "darwin"* ]]; then
     echo "Install bundles for Homebrew."
-    NONINTERACTIVE=1 brew bundle
+    NONINTERACTIVE=1 brew bundle install -v
 fi
 
 # --- Linux: install uv via curl ---
