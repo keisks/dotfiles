@@ -3,11 +3,8 @@
 
 mac homebrew update procedure
 
-  `brew bundle dump --global --force`
-  
-  `chezmoi re-add .Brewfile`
-  
-  `git add`
-  
-  `git push`
+- `brew bundle dump --global --force`
+- `chezmoi re-add .Brewfile`
+- `git add`
+- `git push`
   
